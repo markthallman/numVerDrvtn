@@ -15,7 +15,8 @@ test_that(":= returns value invisibly", {
 test_that(":= sets comparison_reference via .nvd_env", {
   local({
     A := 5
-    expect_equal(numVerDrvtn:::.nvd_env$comparison_reference, 5)
+    env <- getNamespace("numVerDrvtn")$.nvd_env
+    expect_equal(env$comparison_reference, 5)
   })
 })
 
@@ -58,10 +59,11 @@ test_that(".eq.last returns FALSE for mismatch", {
 })
 
 test_that(".eq.last errors when no reference set", {
-  # Reset comparison_reference
-  old_ref <- numVerDrvtn:::.nvd_env$comparison_reference
-  numVerDrvtn:::.nvd_env$comparison_reference <- NULL
-  on.exit(numVerDrvtn:::.nvd_env$comparison_reference <- old_ref)
+  # Access .nvd_env via getNamespace() to allow assignment in tests
+  env <- getNamespace("numVerDrvtn")$.nvd_env
+  old_ref <- env$comparison_reference
+  env$comparison_reference <- NULL
+  on.exit(env$comparison_reference <- old_ref)
 
   expect_error(.eq.last(1), "comparison_reference is NULL")
 })
@@ -77,16 +79,18 @@ test_that(". == expr calls .eq.last", {
 test_that(".asgn assigns and sets reference", {
   local({
     .asgn(B, 99)
+    env <- getNamespace("numVerDrvtn")$.nvd_env
     expect_equal(B, 99)
-    expect_equal(numVerDrvtn:::.nvd_env$comparison_reference, 99)
+    expect_equal(env$comparison_reference, 99)
   })
 })
 
 test_that("definedExpression.options sets print_differences", {
+  env <- getNamespace("numVerDrvtn")$.nvd_env
   old <- definedExpression.options(print_differences = FALSE)
-  expect_false(numVerDrvtn:::.nvd_env$print_differences)
+  expect_false(env$print_differences)
   definedExpression.options(print_differences = TRUE)
-  expect_true(numVerDrvtn:::.nvd_env$print_differences)
+  expect_true(env$print_differences)
   # restore
   definedExpression.options(print_differences = old)
 })

@@ -1,0 +1,15 @@
+{
+  "folders": [
+    {
+      "path": "numVerDrvtn"
+    }
+  ],
+  "settings": {
+    "files.associations": {
+      "*.R": "r",
+      "*.Rmd": "rmd",
+      "DESCRIPTION": "plaintext",
+      "NAMESPACE": "plaintext"
+    }
+  }
+}

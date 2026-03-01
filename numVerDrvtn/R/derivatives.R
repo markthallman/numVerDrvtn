@@ -285,33 +285,42 @@ get_arg_name_from_caller <- function(arg_position = 1) {
     }
 
     if (methods::is(result, "Matrix")) {
-      # Summarise result to examine non-zero pattern
-      smry_fn <- function(m) {
-        if (all(dim(m) == c(1L, 1L))) {
-          Matrix::Matrix(c(1L, 1L, as.numeric(m)), nrow = 1L, ncol = 3L)
-        } else {
-          summary(m)
+      # For sparse matrices only: check and (if needed) unify the non-zero
+      # pattern, because the pattern must be consistent across all perturbations
+      # so that the Jacobian columns are comparable.
+      # Dense Matrix objects do not have a non-zero pattern to manage; just
+      # flatten their values directly.
+      if (methods::is(result, "sparseMatrix")) {
+        # Summarise result to examine non-zero pattern
+        smry_fn <- function(m) {
+          if (all(dim(m) == c(1L, 1L))) {
+            data.frame(i = 1L, j = 1L, x = as.numeric(m))
+          } else {
+            as.data.frame(Matrix::summary(m))
+          }
         }
-      }
-      result_smry   <- smry_fn(result)
-      template_smry <- smry_fn(ctx$result_template)
+        result_smry   <- smry_fn(result)
+        template_smry <- smry_fn(ctx$result_template)
 
-      if (!isTRUE(all.equal(template_smry[, 1L:2L], result_smry[, 1L:2L]))) {
-        # Sparsity pattern has changed — unify and possibly retry jacobian
-        unified <- .unify_sparse_pattern(template_smry, result_smry, dim(result))
-        # Try to take the template from PartitionedMatrix if available
-        if (methods::existsFunction("partMatrixFromTemplate")) {
-          unified <- get("partMatrixFromTemplate")(unified, ctx$result_template)
+        if (!isTRUE(all.equal(template_smry[, 1L:2L], result_smry[, 1L:2L]))) {
+          # Sparsity pattern has changed — unify and possibly retry jacobian
+          unified <- .unify_sparse_pattern(template_smry, result_smry, dim(result))
+          if (methods::existsFunction("partMatrixFromTemplate")) {
+            unified <- get("partMatrixFromTemplate")(unified, ctx$result_template)
+          }
+          if (length(unified@x) > nrow(template_smry)) {
+            ctx$result_template      <- unified
+            .nvd_env$last_deriv_ctx  <- ctx
+            stop("Result of funct() added non-zero elements during jacobian().")
+          } else {
+            result <- unified
+          }
         }
-        if (length(unified@x) > nrow(template_smry)) {
-          ctx$result_template      <- unified
-          .nvd_env$last_deriv_ctx  <- ctx
-          stop("Result of funct() added non-zero elements during jacobian().")
-        } else {
-          result <- unified
-        }
+        result_vec <- result@x
+      } else {
+        # Dense Matrix — simply flatten to numeric vector
+        result_vec <- as.numeric(result)
       }
-      result_vec <- result@x
     } else {
       result_vec <- as.numeric(result)
     }

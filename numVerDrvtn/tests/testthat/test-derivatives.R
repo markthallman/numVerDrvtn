@@ -18,9 +18,10 @@ test_that("init_derivative_args stores context", {
 })
 
 test_that("get_context errors when no context set", {
-  old <- numVerDrvtn:::.nvd_env$last_deriv_ctx
-  numVerDrvtn:::.nvd_env$last_deriv_ctx <- NULL
-  on.exit(numVerDrvtn:::.nvd_env$last_deriv_ctx <- old)
+  env <- getNamespace("numVerDrvtn")$.nvd_env
+  old <- env$last_deriv_ctx
+  env$last_deriv_ctx <- NULL
+  on.exit(env$last_deriv_ctx <- old)
   expect_error(get_context(), "no derivative context")
 })
 
