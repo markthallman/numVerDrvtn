@@ -1,20 +1,20 @@
-# definedExpression S4 virtual class
+# DefinedExpression S4 virtual class
 #
 # A virtual class with no slots that acts as a marker/mixin for objects that
 # participate in numerically-verified derivations.
 #
 # Any class (e.g., PartitionedMatrix, dgCMatrix, numeric) can gain the
-# definedExpression interface by listing it in 'contains':
+# DefinedExpression interface by listing it in 'contains':
 #
-#   setClass("MyClass", contains = c("definedExpression", ...))
+#   setClass("MyClass", contains = c("DefinedExpression", ...))
 #
 # The `:=`, `. ==`, `.eq`, and `.eq.last` operators dispatch on ANY,
-# so no slots or methods on definedExpression itself are required for basic
+# so no slots or methods on DefinedExpression itself are required for basic
 # use.  The class exists primarily to:
-#   1. Provide a type that can be tested with `is(x, "definedExpression")`.
+#   1. Provide a type that can be tested with `is(x, "DefinedExpression")`.
 #   2. Allow future method overrides for specific sub-classes.
 
-#' definedExpression virtual S4 class
+#' DefinedExpression virtual S4 class
 #'
 #' @description
 #' A virtual S4 class with no slots.  Inherit from this class to signal that an
@@ -22,32 +22,32 @@
 #' \code{. ==}, \code{.eq}, \code{.eq.last}).
 #'
 #' Any R class can participate in derivations without inheriting from
-#' \code{definedExpression} — the operators work on any object.  The class is
+#' \code{DefinedExpression} — the operators work on any object.  The class is
 #' provided for:
 #' \itemize{
-#'   \item Type-testing: \code{is(x, "definedExpression")}.
+#'   \item Type-testing: \code{is(x, "DefinedExpression")}.
 #'   \item Method dispatch: sub-classes can override \code{:=} behaviour.
 #' }
 #'
 #' @section Inheritance:
-#' \code{PartitionedMatrix} inherits from \code{definedExpression} automatically
+#' \code{PartitionedMatrix} inherits from \code{DefinedExpression} automatically
 #' when the \pkg{PartitionedMatrix} package is loaded.  For \code{Matrix} or
 #' plain numeric objects no inheritance is needed — they work with the operators
 #' as-is.
 #'
 #' @export
-setClass("definedExpression", contains = "VIRTUAL")
+setClass("DefinedExpression", contains = "VIRTUAL")
 
-#' Test whether an object is a definedExpression
+#' Test whether an object is a DefinedExpression
 #'
 #' @param x Any R object.
 #' @return Logical scalar.
 #' @export
 #'
 #' @examples
-#' is.definedExpression("hello")  # FALSE
-is.definedExpression <- function(x) {
-  methods::is(x, "definedExpression")
+#' is.DefinedExpression("hello")  # FALSE
+is.DefinedExpression <- function(x) {
+  methods::is(x, "DefinedExpression")
 }
 
 # ---- dotSentinel class -------------------------------------------------------

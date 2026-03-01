@@ -7,7 +7,7 @@ numerical verification at each step.
 
 `numVerDrvtn` provides:
 
-- An S4 virtual class `definedExpression` — a marker class with no slots.
+- An S4 virtual class `DefinedExpression` — a marker class with no slots.
   Any class (e.g. `PartitionedMatrix`, `Matrix`, numeric) can inherit from
   it to signal participation in verified derivations.
 - The `:=` operator: assign an expression to a variable, print it, and store
@@ -67,11 +67,11 @@ devtools::install("path/to/numVerDrvtn/numVerDrvtn")
 
 `PartitionedMatrix` objects work directly with all operators in this package.
 The `PartitionedMatrix` class can be extended to inherit from
-`definedExpression` to enable type-testing:
+`DefinedExpression` to enable type-testing:
 
 ```r
 # In PartitionedMatrix package:
-setClass("PartitionedMatrix", contains = c("definedExpression", ...))
+setClass("PartitionedMatrix", contains = c("DefinedExpression", ...))
 ```
 
 ## Dependencies

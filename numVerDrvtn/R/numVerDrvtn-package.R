@@ -1,7 +1,7 @@
 #' numVerDrvtn: Numerically Verified Derivations
 #'
 #' @description
-#' Provides an S4 virtual class \code{\linkS4class{definedExpression}} and
+#' Provides an S4 virtual class \code{\linkS4class{DefinedExpression}} and
 #' supporting operators (\code{:=}, \code{. ==}, \code{.eq}, \code{.eq.last})
 #' for conducting mathematical derivations in R with automatic numerical
 #' verification at each step.
@@ -23,7 +23,7 @@
 #'
 #' Any R object (numeric, \code{Matrix}, \code{PartitionedMatrix}, …) works
 #' with the operators.  A class can also formally inherit from
-#' \code{\linkS4class{definedExpression}} to enable type-testing and custom
+#' \code{\linkS4class{DefinedExpression}} to enable type-testing and custom
 #' method dispatch.
 #'
 #' @section Operators:
