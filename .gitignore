@@ -1,0 +1,5 @@
+# gitignore for outer numVerDrvtn repo
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj.user/

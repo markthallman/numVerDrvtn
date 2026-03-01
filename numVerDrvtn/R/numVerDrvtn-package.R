@@ -1,0 +1,49 @@
+#' numVerDrvtn: Numerically Verified Derivations
+#'
+#' @description
+#' Provides an S4 virtual class \code{\linkS4class{definedExpression}} and
+#' supporting operators (\code{:=}, \code{. ==}, \code{.eq}, \code{.eq.last})
+#' for conducting mathematical derivations in R with automatic numerical
+#' verification at each step.
+#'
+#' @details
+#' The typical workflow is:
+#' \enumerate{
+#'   \item Form one side of an equivalence with \code{A := expr}.
+#'     This assigns \code{expr} to \code{A}, prints it, and stores it as the
+#'     \emph{comparison reference}.
+#'   \item Assert that a rearrangement is numerically equivalent with
+#'     \code{. == rearranged_expr}.  This calls \code{\link{.eq.last}()}
+#'     internally, prints any discrepancies, and returns \code{TRUE}/\code{FALSE}.
+#'   \item Repeat step 2 for as many rearrangements as needed.
+#'   \item Use \code{\link{init_derivative_args}()} + \code{\link{df_dp}()} to
+#'     verify analytical derivatives numerically via
+#'     \code{numDeriv::jacobian()}.
+#' }
+#'
+#' Any R object (numeric, \code{Matrix}, \code{PartitionedMatrix}, …) works
+#' with the operators.  A class can also formally inherit from
+#' \code{\linkS4class{definedExpression}} to enable type-testing and custom
+#' method dispatch.
+#'
+#' @section Operators:
+#' \describe{
+#'   \item{\code{\link{:=}}}{Assign, print, and set the comparison reference.}
+#'   \item{\code{. ==}}{Compare against the most recent reference using
+#'     \code{\link{.eq.last}()}.}
+#'   \item{\code{\link{.eq}}}{Compare two explicit expressions.}
+#'   \item{\code{\link{.eq.last}}}{Compare against the stored reference.}
+#'   \item{\code{\link{.asgn}}}{Function form of \code{:=}.}
+#' }
+#'
+#' @section Derivative verification:
+#' \describe{
+#'   \item{\code{\link{init_derivative_args}}}{Create and register a
+#'     \code{DerivativeContext}.}
+#'   \item{\code{\link{get_context}}}{Retrieve the current context.}
+#'   \item{\code{\link{df_dp}}}{Numerical \eqn{\partial f / \partial p_{ij}}.}
+#'   \item{\code{\link{dv_dv}}}{Full Jacobian of a vector-valued function.}
+#' }
+#'
+#' @keywords internal
+"_PACKAGE"

@@ -1,0 +1,34 @@
+Package: numVerDrvtn
+Type: Package
+Title: Numerically Verified Derivations
+Version: 0.1.0
+Authors@R: person("Mark", "Thallman", email = "mark.thallman@usda.gov",
+    role = c("aut", "cre"))
+Description: Provides an S4 virtual class 'definedExpression' and supporting
+    operators (':=', '.eq', '.eq.last') for conducting mathematical derivations
+    in R with automatic numerical verification at each step. The ':=' operator
+    assigns an expression and prints it, while the '. ==' construct compares a
+    subsequent rearrangement against the previous result. Derivative
+    verification infrastructure is provided via numerical Jacobians computed
+    with the 'numDeriv' package. Any class (e.g., 'PartitionedMatrix', 'Matrix',
+    numeric) can inherit from 'definedExpression' to gain these capabilities.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: false
+Depends:
+    R (>= 4.0)
+Imports:
+    methods,
+    Matrix,
+    numDeriv,
+    digest
+Suggests:
+    PartitionedMatrix,
+    testthat (>= 3.0.0)
+RoxygenNote: 7.3.2
+Collate:
+    'numVerDrvtn-package.R'
+    'package-env.R'
+    'definedExpression-class.R'
+    'operators.R'
+    'derivatives.R'
